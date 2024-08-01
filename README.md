@@ -15,4 +15,4 @@ For the proper functioning of this service in the development version, a docker 
 **All commands must pass successful validation (without any errors).**
 
 ## Software development process (guide)
-Adhere to the coding guidelines we've established to maintain the integrity of the code. You can find the article [HERE](https://angloville.atlassian.net/wiki/spaces/SD/pages/33841/Software+development+process).
+Adhere to the coding guidelines we've established to maintain the integrity of the code. You can find the article [HERE].

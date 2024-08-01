@@ -1,0 +1,4 @@
+userApiControllers:
+    resource: ../src/User/Application/Controller
+    type: attribute
+    prefix: /api

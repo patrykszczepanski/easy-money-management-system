@@ -11,7 +11,7 @@ RUN apk --no-cache --update add \
     libmcrypt-dev \
     coreutils \
     postgresql-dev \
-    openssh \
+    openssh
 
 RUN docker-php-ext-install \
     zip \
@@ -28,7 +28,7 @@ RUN apk --no-cache add shadow && \
     usermod -u 1000 www-data
 
 # Create application directory and set permissions
-RUN mkdir -p /var/www/app && chown www-data:www-data /var/www/app
+RUN mkdir -p /var/www/backend && chown www-data:www-data /var/www/backend
 
 # Copy PHP configuration overrides
 COPY ./docker/php-fpm/php-ini-overrides.ini "$PHP_INI_DIR/conf.d/99-php-ini-overrides.ini"
@@ -36,7 +36,7 @@ COPY ./docker/php-fpm/opcache.ini "$PHP_INI_DIR/conf.d/opcache.ini"
 
 # Set working directory and switch to www-data user
 USER www-data
-WORKDIR /var/www/app
+WORKDIR /var/www/backend
 
 # Expose port 9000
 EXPOSE 9000
@@ -51,7 +51,7 @@ FROM base as dev
 FROM base as prod
 
 # Copy application code
-COPY --chown=www-data:www-data ./app /var/www/app
+COPY --chown=www-data:www-data ./backend /var/www/backend
 
 # Command to run PHP-FPM
 CMD php-fpm

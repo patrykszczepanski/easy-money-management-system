@@ -23,21 +23,21 @@ services:
         ports:
             - "9000:80"
         volumes:
-            - ./app:/var/www/app
+            - ./backend:/var/www/backend
             - ./docker/logs/web:/var/log/nginx
         networks:
             - emms-network
 
-    core-service:
+    emms:
         container_name: emms
         user: www-data
         build:
             context: .
             dockerfile: docker/php-fpm/Dockerfile
             target: dev
-        working_dir: /var/www/app
+        working_dir: /var/www/backend
         volumes:
-            - ./app:/var/www/app
+            - ./backend:/var/www/backend
             - ./docker/logs/php-fpm:/var/log
         environment:
             - PHP_OPCACHE_VALIDATE_TIMESTAMPS=1
@@ -45,5 +45,5 @@ services:
             - emms-network
 
 networks:
-    angloville:
+    emms-network:
         name: emms-network
