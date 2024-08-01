@@ -1,0 +1,10 @@
+.idea
+.settings
+.buildpath
+.project
+/docker/logs/
+/docker/volumes/
+/volumes/
+/logs
+/vendor/
+docker-compose.override.yml

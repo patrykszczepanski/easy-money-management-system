@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+    db:
+        image: postgres:15.4-alpine
+        volumes:
+            - ./db:/docker-entrypoint-initdb.d
+            - ./volumes/db:/var/lib/postgresql/data
+        environment:
+            POSTGRES_PASSWORD: postgres
+        restart: unless-stopped
+        ports:
+            - "54321:5432"
+        networks:
+            - emms-network
+
+    web:
+        container_name: emms-web
+        build:
+            context: .
+            dockerfile: docker/web/Dockerfile
+            target: local
+        ports:
+            - "9000:80"
+        volumes:
+            - ./app:/var/www/app
+            - ./docker/logs/web:/var/log/nginx
+        networks:
+            - emms-network
+
+    core-service:
+        container_name: emms
+        user: www-data
+        build:
+            context: .
+            dockerfile: docker/php-fpm/Dockerfile
+            target: dev
+        working_dir: /var/www/app
+        volumes:
+            - ./app:/var/www/app
+            - ./docker/logs/php-fpm:/var/log
+        environment:
+            - PHP_OPCACHE_VALIDATE_TIMESTAMPS=1
+        networks:
+            - emms-network
+
+networks:
+    angloville:
+        name: emms-network
