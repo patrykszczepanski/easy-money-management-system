@@ -1,4 +1,4 @@
 userApiControllers:
-    resource: ../src/User/Application/Controller
+    resource: ../src/EMMS/User/Application/Controller
     type: attribute
     prefix: /api

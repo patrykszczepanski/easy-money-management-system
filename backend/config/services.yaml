@@ -11,14 +11,42 @@ services:
         autoconfigure: true
         autowire: true
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
-    App\:
-        resource: '../src/'
-        exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Kernel.php'
+        # Configure
+    _instanceof:
+        App\Shared\Domain\Bus\Event\DomainEventSubscriber:
+            tags: ['app.domain_event_subscriber']
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    # Wire
+    App\Shared\:
+        resource: '../src/Shared'
+
+    App\EMMS\:
+        resource: '../src/EMMS'
+
+
+    # Tagging
+    App\Shared\Infrastructure\Bus\Event\InMemory\InMemorySymfonyEventBus:
+        arguments: [!tagged app.domain_event_subscriber]
+        lazy: true
+
+    App\Shared\Infrastructure\Bus\Event\DomainEventMapping:
+        arguments: [!tagged app.domain_event_subscriber]
+
+    App\Shared\Infrastructure\Bus\Event\DomainEventSubscriberLocator:
+        arguments: [!tagged app.domain_event_subscriber]
+
+
+    # Doctrine filters
+    gedmo.listener.timestampable:
+        class: Gedmo\Timestampable\TimestampableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]
+
+    gedmo.listener.softdeleteable:
+        class: Gedmo\SoftDeleteable\SoftDeleteableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]
