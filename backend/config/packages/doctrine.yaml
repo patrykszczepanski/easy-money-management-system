@@ -13,8 +13,8 @@ doctrine:
         mappings:
             User:
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/User/Account/Domain/Entity'
-                prefix: 'App\User\Account\Domain\Entity'
+                dir: '%kernel.project_dir%/src/EMMS/User/Domain/Entity'
+                prefix: 'App\EMMS\User\Domain\Entity'
                 alias: User
         controller_resolver:
             auto_mapping: false
